@@ -1,5 +1,5 @@
 <template>
-  <div :class="[minimal && '' || 'flex']">
+  <div :class="[minimal ? '' : 'flex']">
     <component
       :is="wrappingComponent"
       :to="route"
@@ -9,7 +9,7 @@
         v-if="iconName"
         :icon-name="iconName"
         :selected="selected"
-        :label="minimal && text"
+        :label="minimal ? text : ''"
         size="big"
       />
       <p v-if="!minimal" class="self-center leading-none pl-3">

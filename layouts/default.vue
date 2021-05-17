@@ -1,9 +1,10 @@
 <template>
   <div class="flex">
     <section class="flex-none main-navbar p-3">
-      <main-navbar />
+      <MainNavbar />
     </section>
-    <section class="flex-grow main-content">
+    <section class="flex-grow main-content p-3">
+      <SecondaryNavbar />
       <Nuxt />
     </section>
     <section class="flex-none main-column p-3" />
@@ -11,10 +12,12 @@
 </template>
 <script>
 import MainNavbar from '@/components/Navbar/MainNavbar';
+import SecondaryNavbar from '@/components/Navbar/SecondaryNavbar';
 
 export default {
   components: {
     MainNavbar,
+    SecondaryNavbar,
   },
 };
 </script>

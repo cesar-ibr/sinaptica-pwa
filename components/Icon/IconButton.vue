@@ -32,7 +32,7 @@ export default {
     /**
      * Icon size.
      * - @options 'small', 'medium', 'big'
-     * - @default 'medium'
+     * - @default `'medium'`
      */
     size: {
       type: String,

@@ -32,7 +32,7 @@
       :is-link-button="false"
     />
     <div class="border-b border-gray h-px" />
-    <template v-if="!minimal">
+    <template v-if="isOpen">
       <p class="text-center py-3">
         Sinaptica
       </p>
@@ -65,6 +65,7 @@ export default {
   },
   data () {
     return {
+      // TODO: Enable close and open
       isOpen: true,
     };
   },
