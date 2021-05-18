@@ -5,14 +5,15 @@
       icon-name="user-circle"
       text="Cesar Sanchez"
       subtext="@cesarsan"
-      route="/account"
-      selected
+      route="/profile"
+      auto-select
     />
     <!-- Articles -->
     <NavbarOption
       icon-name="article"
       text="Artículos"
       route="/account/articles"
+      auto-select
     >
       <template #action>
         <router-link to="/account/articles/new" class="self-center">
@@ -25,6 +26,7 @@
       icon-name="post"
       text="Posts"
       route="/account/posts"
+      auto-select
     />
     <!-- Settings -->
     <NavbarOption
@@ -32,23 +34,39 @@
       text="Ajustes"
       :is-link-button="false"
     />
-    <div class="border-b border-gray h-px" />
+    <hr class="border-gray mt-10 pb-13">
     <template v-if="isOpen">
       <p class="text-center py-3">
         Sinaptica
       </p>
-      <ul class="list-none leading-relaxed font-light">
-        <li>
-          <router-link to="/sinaptica/manifiesto" v-text="'Manifiesto'" />
+      <ul class="list-none font-light">
+        <li class="pb-2">
+          <router-link
+            to="/sinaptica/manifiesto"
+            active-class="text-primary"
+            v-text="'Manifiesto'"
+          />
         </li>
-        <li>
-          <router-link to="/sinaptica/bugs" v-text="'Bugs y Sugerencias'" />
+        <li class="pb-2">
+          <router-link
+            to="/sinaptica/bugs"
+            active-class="text-primary"
+            v-text="'Bugs y Sugerencias'"
+          />
         </li>
-        <li>
-          <router-link to="/sinaptica/ayuda" v-text="'Ayuda'" />
+        <li class="pb-2">
+          <router-link
+            to="/sinaptica/ayuda"
+            active-class="text-primary"
+            v-text="'Ayuda'"
+          />
         </li>
-        <li>
-          <router-link to="/sinaptica/negocios" v-text="'Negocios'" />
+        <li class="pb-2">
+          <router-link
+            to="/sinaptica/negocios"
+            active-class="text-primary"
+            v-text="'Negocios'"
+          />
         </li>
       </ul>
     </template>

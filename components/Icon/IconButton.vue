@@ -1,20 +1,16 @@
 <template>
   <div class="icon-button">
-    <div
-      class="rounded-full flex items-center justify-center"
-      :class="[selected && 'bg-secondary' || '']"
-    >
-      <Icon
-        :icon-name="iconName"
-        :size="size"
-        :color="selected ? selectedColor : color"
-      />
-    </div>
+    <Icon
+      :icon-name="iconName"
+      :size="size"
+      :color="selected ? selectedColor : color"
+    />
     <span v-if="label">{{ label }}</span>
   </div>
 </template>
 
 <script>
+import { getIconSize } from './icon.util';
 import Icon from './Icon';
 
 export default {
@@ -62,7 +58,7 @@ export default {
      */
     selectedColor: {
       type: String,
-      default: 'primary',
+      default: 'white',
     },
     /**
      * Text below the icon
@@ -70,6 +66,11 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    iconSize () {
+      return `${getIconSize(this.size)}px`;
     },
   },
 };

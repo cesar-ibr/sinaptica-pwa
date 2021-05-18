@@ -8,11 +8,7 @@
   </svg>
 </template>
 <script>
-const ICON_SIZES = {
-  small: 16,
-  medium: 24,
-  big: 32,
-};
+import { ICON_SIZES, getIconSize } from './icon.util';
 
 export default {
   props: {
@@ -33,19 +29,21 @@ export default {
       default: 'current',
     },
     /**
-     * Icon Size: 'small', 'medium', 'big'
+     * Icon Size
+     * - @options 'small', 'medium', 'big'
+     * - @default 'small'
      */
     size: {
       type: String,
       default: 'small',
       validator (val) {
-        return ['small', 'medium', 'big'].includes(val);
+        return Object.keys(ICON_SIZES).includes(val);
       },
     },
   },
   computed: {
     iconSize () {
-      return ICON_SIZES[this.size];
+      return getIconSize(this.size);
     },
     iconColor () {
       return `text-${this.color}`;

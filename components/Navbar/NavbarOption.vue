@@ -1,20 +1,23 @@
 <template>
-  <div :class="[minimal ? '' : 'flex']">
+  <div :class="[minimal ? '' : 'flex', 'text-gray-dark']">
     <component
       :is="wrappingComponent"
       :to="route"
-      :class="[minimal && '' || 'flex flex-grow', 'py-3', 'cursor-pointer']"
+      :class="[minimal ? '' : 'flex flex-grow py-2', 'cursor-pointer']"
+      active-class="text-primary"
     >
       <IconButton
         v-if="iconName"
+        :class="{ 'flex flex-col items-center': minimal }"
         :icon-name="iconName"
         :selected="selected"
+        selected-color="primary"
         :label="minimal ? text : ''"
-        size="big"
+        size="medium"
       />
       <p v-if="!minimal" class="self-center leading-none pl-3">
         <span v-if="text" class="" v-text="text" />
-        <span v-if="subtext" class="text-sm">
+        <span v-if="subtext" class="text-sm font-light">
           <br> {{ subtext }}
         </span>
       </p>
@@ -88,10 +91,24 @@ export default {
       type: Boolean,
       default: true,
     },
+    /**
+     * Internally set `selected` state to `true` when the current
+     * app route starts with the one defined in `route`
+     */
+    autoSelect: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     wrappingComponent () {
       return this.isLinkButton ? 'router-link' : 'div';
+    },
+    shouldBeSelected () {
+      const matchRoute =
+        Boolean(this.route.length) &&
+          this.$route.path.startsWith(this.route);
+      return this.selected || (this.autoSelect && matchRoute);
     },
   },
 };
