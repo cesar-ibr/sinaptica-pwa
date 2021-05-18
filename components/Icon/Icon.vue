@@ -1,12 +1,12 @@
 <template>
-  <img
+  <svg
+    :class="['stroke-current', iconColor]"
     :width="iconSize"
     :height="iconSize"
-    :src="iconPath"
-    :alt="alt"
   >
+    <use :xlink:href="iconRef" />
+  </svg>
 </template>
-
 <script>
 const ICON_SIZES = {
   small: 16,
@@ -17,19 +17,20 @@ const ICON_SIZES = {
 export default {
   props: {
     /**
-     * Just the name of the SVG icon file without ext
+     * Icon identifier (ID) from the `sprite.svg` file
      */
     iconName: {
       type: String,
       required: true,
-      default: '',
     },
     /**
-     * ALT message
+     * Icon Color
+     * - @options 'current', 'primary', 'secondary', 'white'...
+     * - @default 'current'
      */
-    alt: {
+    color: {
       type: String,
-      default: 'SVG Icon',
+      default: 'current',
     },
     /**
      * Icon Size: 'small', 'medium', 'big'
@@ -43,11 +44,15 @@ export default {
     },
   },
   computed: {
-    iconPath () {
-      return require(`~/assets/icons/${this.iconName}.svg`);
-    },
     iconSize () {
       return ICON_SIZES[this.size];
+    },
+    iconColor () {
+      return `text-${this.color}`;
+    },
+    iconRef () {
+      const filePath = require('~/assets/icons/sprite.svg');
+      return `${filePath}#${this.iconName}`;
     },
   },
 };

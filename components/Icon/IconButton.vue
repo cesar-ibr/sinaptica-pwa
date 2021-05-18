@@ -7,6 +7,7 @@
       <Icon
         :icon-name="iconName"
         :size="size"
+        :color="selected ? selectedColor : color"
       />
     </div>
     <span v-if="label">{{ label }}</span>
@@ -44,6 +45,24 @@ export default {
     selected: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * Icon Color
+     * - @options 'current', 'primary', 'secondary', 'white'...
+     * - @default 'current'
+     */
+    color: {
+      type: String,
+      default: 'current',
+    },
+    /**
+     * Icon color when `selected` is `true`
+     * - @options 'current', 'primary', 'secondary', 'white'...
+     * - @default 'primary'
+     */
+    selectedColor: {
+      type: String,
+      default: 'primary',
     },
     /**
      * Text below the icon

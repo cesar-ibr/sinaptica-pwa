@@ -6,6 +6,7 @@
       text="Cesar Sanchez"
       subtext="@cesarsan"
       route="/account"
+      selected
     />
     <!-- Articles -->
     <NavbarOption

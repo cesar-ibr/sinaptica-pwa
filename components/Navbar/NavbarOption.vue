@@ -35,7 +35,7 @@ export default {
   },
   props: {
     /**
-     * Just the name of the SVG icon file without ext
+     * Icon ID from `sprite.svg`
      */
     iconName: {
       type: String,
