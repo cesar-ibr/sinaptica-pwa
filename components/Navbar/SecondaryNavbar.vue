@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-4 py-3 rounded-xl shadow-md bg-white flex justify-around m-auto"
+    class="px-4 py-3 rounded-full shadow-md bg-white flex justify-around m-auto"
     style="width: 500px"
   >
     <NavbarOption

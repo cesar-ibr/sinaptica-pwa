@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 rounded-xl shadow-md bg-white">
+  <Card>
     <!-- Account Link -->
     <NavbarOption
       icon-name="user-circle"
@@ -34,34 +34,34 @@
       text="Ajustes"
       :is-link-button="false"
     />
-    <hr class="border-gray mt-10 pb-13">
+    <hr class="mt-12 pb-4">
     <template v-if="isOpen">
-      <p class="text-center py-3">
+      <p class="text-center py-4">
         Sinaptica
       </p>
       <ul class="list-none font-light">
-        <li class="pb-2">
+        <li class="pb-4">
           <router-link
             to="/sinaptica/manifiesto"
             active-class="text-primary"
             v-text="'Manifiesto'"
           />
         </li>
-        <li class="pb-2">
+        <li class="pb-4">
           <router-link
             to="/sinaptica/bugs"
             active-class="text-primary"
             v-text="'Bugs y Sugerencias'"
           />
         </li>
-        <li class="pb-2">
+        <li class="pb-4">
           <router-link
             to="/sinaptica/ayuda"
             active-class="text-primary"
             v-text="'Ayuda'"
           />
         </li>
-        <li class="pb-2">
+        <li class="pb-4">
           <router-link
             to="/sinaptica/negocios"
             active-class="text-primary"
@@ -70,15 +70,17 @@
         </li>
       </ul>
     </template>
-  </div>
+  </Card>
 </template>
 
 <script>
+import Card from '@/components/Layout/Card';
 import Icon from '@/components/Icon/Icon';
 import NavbarOption from './NavbarOption';
 
 export default {
   components: {
+    Card,
     Icon,
     NavbarOption,
   },

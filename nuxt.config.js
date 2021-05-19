@@ -24,6 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '@/plugins/vuelidate.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -43,6 +44,23 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: process.env.FBASE_API_KEY,
+          authDomain: process.env.FBASE_AUTH_DOMAIN,
+          projectId: process.env.FBASE_PROJECT_ID,
+          storageBucket: process.env.FBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.FBASE_MESSAGING_SENDER_ID,
+          appId: process.env.FBASE_APP_ID,
+          measurementId: process.env.FBASE_MEASUREMENT_ID,
+        },
+        services: {
+          auth: true,
+        },
+      },
+    ],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
