@@ -1,102 +1,82 @@
 <template>
-  <Card class="m-auto w-11/12 lg:w-2/6 flex flex-col mt-10">
-    <template v-if="!loginWithEmail">
-      <h1 class="mb-8 text-center">
-        Ingresa con una de las siguientes opciones
+  <Card class="m-auto w-11/12 lg:w-2/6 mt-10">
+    <template v-if="signInError">
+      <h1 class="mb-4">
+        😬 Algo no salió bien
       </h1>
-      <Card class="mb-4" rounded clickable>
-        <p>
-          <Icon
-            icon-name="google"
-            class="inline mr-4"
-            size="medium"
-          />
-          Cuenta de Google
-        </p>
-      </Card>
-      <Card class="mb-4" rounded clickable>
-        <p>
-          <Icon
-            icon-name="github"
-            class="inline mr-4"
-            size="medium"
-          />
-          Cuenta de GitHub
-        </p>
-      </Card>
-      <Card
-        class="mb-4"
-        rounded
-        clickable
-        @click="loginWithEmail = true"
-      >
-        <p>
-          <Icon
-            icon-name="email"
-            class="inline mr-4"
-            size="medium"
-          />
-          Email
-        </p>
-      </Card>
+      <p>Parece ser que entraste desde otro dispositivo o el link expiró</p>
+      <p class="text-right">
+        <router-link to="/auth/sign-in" class="p-4 text-primary">
+          Reintentar
+        </router-link>
+      </p>
     </template>
-    <template v-if="loginWithEmail && !emailSent">
-      <Field
-        v-model.trim="userEmail"
-        f-type="email"
-        label="Ingresa tu Email"
-        class="mb-4"
-        placeholder="micuenta@email.com"
-        :error-message="emailError"
-      />
-      <Button
-        class="self-end"
-        :disabled="$v.userEmail.$invalid"
-        @click="emailSent = true"
-      >
-        Continuar
-      </Button>
-    </template>
-    <template v-if="emailSent">
-      <h1 class="text-center mb-4">
-        ¡Listo! 📨
+    <template v-if="!signInError">
+      <h1 class="text-center">
+        Validando...
       </h1>
-      <p>Revisa tu bandeja de entrada y da click en el link que te enviamos a tu correo</p>
     </template>
   </Card>
 </template>
 <script>
-import Icon from '@/components/Icon/Icon';
 import Card from '@/components/Layout/Card';
-import Button from '@/components/Button/Button';
-import Field from '@/components/Controls/Field';
-import { required, email } from 'vuelidate/lib/validators';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
-    Icon,
     Card,
-    Button,
-    Field,
   },
   layout: 'void',
   data () {
     return {
-      loginWithEmail: false,
-      emailSent: false,
-      userEmail: '',
+      signInError: false,
     };
   },
-  validations: {
-    userEmail: {
-      required,
-      email,
-    },
-  },
   computed: {
-    emailError () {
-      if (!this.$v.userEmail.$invalid) { return ''; }
-      return 'Ingresa una dirección de correo válida';
+    ...mapState('auth', ['signInEmail']),
+  },
+  async mounted () {
+    const isSignIn = this.$fire.auth.isSignInWithEmailLink(window.location.href);
+    if (!this.signInEmail || !isSignIn) {
+      this.signInError = true;
+      return;
+    }
+    try {
+      const result = await this.$fire.auth.signInWithEmailLink(this.signInEmail, window.location.href);
+      if (result.additionalUserInfo.isNewUser) {
+        await this.setDefaultProfile(result.user);
+        this.$router.push('/profile');
+        return;
+      }
+      await this.getUserProfile(result.user);
+      this.$router.push('/home');
+    } catch (e) {
+      this.signInError = true;
+      // TODO: Log errors
+      // console.error(e);
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['getUserProfile', 'setUserProfile']),
+
+    async setDefaultProfile (user) {
+      const defaultName = (user.email || '').split('@')[0];
+      const profile = {
+        name: defaultName || user.displayName,
+        role: '',
+        description: '',
+      };
+
+      try {
+        await this.setUserProfile({
+          uid: user.uid,
+          profile,
+        });
+      } catch (e) {
+        this.signInError = true;
+        // TODO: Log errors
+        // console.error(e);
+      }
     },
   },
 };

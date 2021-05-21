@@ -4,14 +4,14 @@
       :is="wrappingComponent"
       :to="route"
       :class="[minimal ? '' : 'flex flex-grow py-2', 'cursor-pointer']"
-      active-class="text-primary"
+      :active-class="'text-' + activeColor"
     >
       <IconButton
         v-if="iconName"
         :class="{ 'flex flex-col items-center': minimal }"
         :icon-name="iconName"
         :selected="selected"
-        selected-color="primary"
+        :selected-color="activeColor"
         :label="minimal ? text : ''"
         size="medium"
       />
@@ -92,23 +92,16 @@ export default {
       default: true,
     },
     /**
-     * Internally set `selected` state to `true` when the current
-     * app route starts with the one defined in `route`
+     * The text color when the link is active
      */
-    autoSelect: {
-      type: Boolean,
-      default: false,
+    activeColor: {
+      type: String,
+      default: 'primary',
     },
   },
   computed: {
     wrappingComponent () {
       return this.isLinkButton ? 'router-link' : 'div';
-    },
-    shouldBeSelected () {
-      const matchRoute =
-        Boolean(this.route.length) &&
-          this.$route.path.startsWith(this.route);
-      return this.selected || (this.autoSelect && matchRoute);
     },
   },
 };

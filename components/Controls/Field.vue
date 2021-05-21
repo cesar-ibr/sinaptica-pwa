@@ -2,18 +2,25 @@
   <div class="flex flex-col">
     <label v-if="label" class="font-medium" v-text="label" />
     <input
+      v-if="fType !== 'textarea'"
       :type="fType"
-      :class="[
-        'input',
-        label ? 'mt-4' : '',
-        errorMessage ? 'with--error' : ''
-      ]"
+      :name="name"
+      :class="cssClasses"
       :placeholder="placeholder"
+      v-bind="attributes"
       v-on="inputListeners"
     >
+    <textarea
+      v-if="fType === 'textarea'"
+      :name="name"
+      :class="cssClasses"
+      :placeholder="placeholder"
+      v-bind="attributes"
+      v-on="inputListeners"
+    />
     <span
       v-if="errorMessage"
-      class="text-red text-center font-medium"
+      class="text-red pl-8 font-medium"
       v-text="errorMessage"
     />
   </div>
@@ -21,6 +28,10 @@
 <script>
 export default {
   props: {
+    name: {
+      type: String,
+      default: '',
+    },
     fType: {
       type: String,
       default: 'text',
@@ -32,6 +43,13 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+    /**
+     * Object with list of attributes such as 'maxlength', 'minlength', etc
+     */
+    attributes: {
+      type: Object,
+      default: () => ({}),
     },
     /**
      * Array with validators from 'vuelidate.js'.
@@ -62,12 +80,20 @@ export default {
         },
       );
     },
+    cssClasses () {
+      return [
+        'input',
+        this.fType === 'textarea' ? 'rounded-xl' : 'rounded-full',
+        this.label ? 'mt-4' : '',
+        this.errorMessage ? 'with--error' : '',
+      ];
+    },
   },
 };
 </script>
 <style lang="postcss" scoped>
 .input {
-  @apply p-4 rounded-full ring-2;
+  @apply p-4 ring-2;
   @apply border border-transparent focus:outline-none focus:border-transparent;
   @apply ring-gray focus:ring-black;
 }

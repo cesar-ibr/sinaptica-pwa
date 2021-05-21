@@ -36,9 +36,9 @@ export default {
     cssColors () {
       const color = this.disabled ? 'gray' : this.color;
       const defaultCss =
-        `text-white bg-${color} `.concat(this.disabled ? '' : 'shadow hover:shadow-md');
+        `px-8 py-4 text-white font-semibold bg-${color} `.concat(this.disabled ? '' : 'shadow hover:shadow-md');
       const lightCss =
-        `border border-${color} text-${color} hover:bg-${color} hover:text-white`;
+        `p-2 border border-${color} text-${color} hover:bg-${color} hover:text-white`;
       return this.light ? lightCss : defaultCss;
     },
   },
@@ -46,6 +46,6 @@ export default {
 </script>
 <style lang="postcss" scoped>
 .btn {
-  @apply px-8 py-4 font-medium font-semibold rounded-full;
+  @apply font-medium rounded-full;
 }
 </style>

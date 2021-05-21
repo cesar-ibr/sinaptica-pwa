@@ -44,27 +44,35 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-    [
-      '@nuxtjs/firebase',
-      {
-        config: {
-          apiKey: process.env.FBASE_API_KEY,
-          authDomain: process.env.FBASE_AUTH_DOMAIN,
-          projectId: process.env.FBASE_PROJECT_ID,
-          storageBucket: process.env.FBASE_STORAGE_BUCKET,
-          messagingSenderId: process.env.FBASE_MESSAGING_SENDER_ID,
-          appId: process.env.FBASE_APP_ID,
-          measurementId: process.env.FBASE_MEASUREMENT_ID,
-        },
-        services: {
-          auth: true,
-        },
-      },
-    ],
+    '@nuxtjs/firebase',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
+
+  // Firebase Auth Config
+  firebase: {
+    config: {
+      apiKey: process.env.FBASE_API_KEY,
+      authDomain: process.env.FBASE_AUTH_DOMAIN,
+      projectId: process.env.FBASE_PROJECT_ID,
+      storageBucket: process.env.FBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.FBASE_MESSAGING_SENDER_ID,
+      appId: process.env.FBASE_APP_ID,
+      measurementId: process.env.FBASE_MEASUREMENT_ID,
+    },
+    onFirebaseHosting: false,
+    services: {
+      auth: {
+        initialize: {
+          onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+          subscribeManually: false,
+        },
+        emulatorPort: undefined,
+      },
+      database: true,
+    },
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

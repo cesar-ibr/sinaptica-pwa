@@ -2,20 +2,27 @@
   <Card>
     <!-- Account Link -->
     <NavbarOption
+      v-if="isUserSignedIn"
       icon-name="user-circle"
-      text="Cesar Sanchez"
-      subtext="@cesarsan"
+      :text="profile.name"
+      :subtext="profile.role"
       route="/profile"
-      auto-select
+    />
+    <!-- Create Articles (Unregistered Users) -->
+    <NavbarOption
+      v-if="!isUserSignedIn"
+      icon-name="article"
+      text="Crear Artículo"
+      route="/auth/sign-in"
     />
     <!-- Articles -->
     <NavbarOption
+      v-if="isUserSignedIn"
       icon-name="article"
       text="Artículos"
       route="/account/articles"
-      auto-select
     >
-      <template #action>
+      <template v-if="isUserSignedIn" #action>
         <router-link to="/account/articles/new" class="self-center">
           <Icon icon-name="add" />
         </router-link>
@@ -26,15 +33,24 @@
       icon-name="post"
       text="Posts"
       route="/account/posts"
-      auto-select
     />
     <!-- Settings -->
     <NavbarOption
+      v-if="isUserSignedIn"
       icon-name="settings"
       text="Ajustes"
       :is-link-button="false"
     />
+    <router-link
+      v-if="!isUserSignedIn"
+      to="/auth/sign-in"
+    >
+      <Button class="mt-4 w-full" light>
+        Iniciar sesión
+      </Button>
+    </router-link>
     <hr class="mt-12 pb-4">
+    <!-- About Sinaptica -->
     <template v-if="isOpen">
       <p class="text-center py-4">
         Sinaptica
@@ -70,18 +86,28 @@
         </li>
       </ul>
     </template>
+    <span
+      v-if="isUserSignedIn"
+      class="font-bold text-gray-dark pb-4 cursor-pointer"
+      @click="execLogOut"
+    >
+      Salir
+    </span>
   </Card>
 </template>
 
 <script>
 import Card from '@/components/Layout/Card';
 import Icon from '@/components/Icon/Icon';
+import Button from '@/components/Button/Button';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import NavbarOption from './NavbarOption';
 
 export default {
   components: {
     Card,
     Icon,
+    Button,
     NavbarOption,
   },
   data () {
@@ -89,6 +115,19 @@ export default {
       // TODO: Enable close and open
       isOpen: true,
     };
+  },
+  computed: {
+    ...mapState('auth', {
+      profile: state => state.profile || {},
+    }),
+    ...mapGetters('auth', ['isUserSignedIn']),
+  },
+  methods: {
+    ...mapActions('auth', ['logOut']),
+    async execLogOut () {
+      await this.logOut();
+      this.$router.push('/home');
+    },
   },
 };
 </script>
