@@ -7,14 +7,14 @@ export default {
    * @param {Context} ctx
    * @param {Object} param1
    */
-  onAuthStateChangedAction (ctx, { authUser, claims }) {
+  async onAuthStateChangedAction (ctx, { authUser, claims }) {
     if (!authUser) {
       // claims = null
       // Perform logout operations
       ctx.commit(types.RESET_AUTH_USER);
     } else {
       ctx.commit(types.SET_AUTH_USER, authUser);
-      ctx.dispatch('getUserProfile', { uid: authUser.uid });
+      await ctx.dispatch('getUserProfile', { uid: authUser.uid });
     }
   },
 

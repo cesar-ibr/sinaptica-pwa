@@ -163,7 +163,7 @@ export default {
         if (additionalUserInfo && additionalUserInfo.isNewUser) {
           await this.setUserProfile({
             uid: user.uid,
-            profile: additionalUserInfo.profile,
+            profile: additionalUserInfo.profile || {},
           });
           this.$router.push('/profile');
           return;

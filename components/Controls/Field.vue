@@ -4,17 +4,21 @@
     <input
       v-if="fType !== 'textarea'"
       :type="fType"
+      :value="value"
       :name="name"
       :class="cssClasses"
       :placeholder="placeholder"
+      :disabled="disabled"
       v-bind="attributes"
       v-on="inputListeners"
     >
     <textarea
       v-if="fType === 'textarea'"
       :name="name"
+      :value="value"
       :class="cssClasses"
       :placeholder="placeholder"
+      :disabled="disabled"
       v-bind="attributes"
       v-on="inputListeners"
     />
@@ -32,6 +36,10 @@ export default {
       type: String,
       default: '',
     },
+    value: {
+      type: [String, Number],
+      default: '',
+    },
     fType: {
       type: String,
       default: 'text',
@@ -45,19 +53,16 @@ export default {
       default: '',
     },
     /**
-     * Object with list of attributes such as 'maxlength', 'minlength', etc
+     * Object with list of HTML input attributes
+     * such as 'maxlength', 'minlength', etc.
      */
     attributes: {
       type: Object,
       default: () => ({}),
     },
-    /**
-     * Array with validators from 'vuelidate.js'.
-     * NOTE: Not all validators are supported
-     */
-    validators: {
-      type: Array,
-      default: () => [],
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     /**
      * If there are no errors this should be remain empty.
