@@ -4,7 +4,8 @@
       'shadow bg-white',
       padding,
       rounded ? 'rounded-full' : 'rounded-xl',
-      clickable ? 'hover:shadow-lg cursor-pointer':''
+      clickable ? 'hover:shadow-lg cursor-pointer':'',
+      columnLayout ? 'flex flex-col' : ''
     ]"
     v-on="$listeners"
   >
@@ -23,6 +24,10 @@ export default {
       default: false,
     },
     clickable: {
+      type: Boolean,
+      default: false,
+    },
+    columnLayout: {
       type: Boolean,
       default: false,
     },

@@ -1,5 +1,5 @@
 <template>
-  <Card class="m-auto flex flex-col mt-10">
+  <Card class="m-auto mt-10" column-layout>
     <h1 class="mb-4">
       Actualiza tu perfil
     </h1>
@@ -8,7 +8,6 @@
       f-type="text"
       name="Name"
       label="Nombre"
-      class="mb-4"
       placeholder="Ana María, Luis Angel, José Roberto"
       :error-message="requiredErrorMsg('name')"
       :attributes="{ maxlength: 50 }"
@@ -18,7 +17,6 @@
       f-type="text"
       name="userRole"
       label="Headline (Rol, Profesión o Hobby)"
-      class="mb-4"
       placeholder="Programador Web, Analísta de Datos, Mecatrónica"
       :error-message="requiredErrorMsg('role')"
       :attributes="{ maxlength: 50 }"
@@ -28,7 +26,6 @@
       f-type="textarea"
       name="description"
       label="Sobre ti"
-      class="mb-4"
       placeholder="Programo robots 🤖..."
       :error-message="requiredErrorMsg('description')"
       :attributes="{ rows: 2, cols: 40, maxlength: 300 }"

@@ -17,7 +17,7 @@
       @input="setValue('title', $event)"
     />
     <Field
-      label="Etiquetas (Usar ';' para separar)"
+      label="Etiquetas"
       placeholder="Frontend; Backend; Machine Learning;"
       :value="article.tags"
       :attributes="{ maxlenght: 150 }"
@@ -29,7 +29,7 @@
       <span
         class="text-secondary font-bold cursor-pointer"
         @click="previewMd = !previewMd"
-        v-text="previewMd ? 'Preview' : 'Editar'"
+        v-text="!previewMd ? 'Preview' : 'Editar'"
       />
     </p>
     <Field
@@ -49,14 +49,8 @@
       v-html="compiledMarkdown"
     />
     <p
-      v-if="saveInProgress"
-      class="self-end text-gray"
-      v-text="'Guardando..'"
-    />
-    <p
-      v-if="!saveInProgress && isArticleSaved"
-      class="text-primary self-end"
-      v-text="'Guardado'"
+      class="text-gray-dark self-end"
+      v-text="saveInProgress ? 'Guardando...':'Guardado'"
     />
     <BaseModal
       :is-open="openPublishModal"
@@ -89,11 +83,10 @@ export default {
   middleware: ['auth'],
   data () {
     return {
-      openPublishModal: false,
-      saveInProgress: false,
-      isArticleSaved: false,
       previewMd: false,
       markdownContent: '',
+      openPublishModal: false,
+      saveInProgress: false,
       article: {
         uid: '',
         title: '',
@@ -102,6 +95,19 @@ export default {
         isPublished: false,
       },
     };
+  },
+  async fetch () {
+    const { articleId } = this.$route.params;
+    try {
+      const article = await this.$axios.$get(`/articles/${articleId}`);
+      const tags = this.strTags(article.tags);
+      this.article = {
+        ...article,
+        tags,
+      };
+    } catch (e) {
+      this.handleError(e);
+    }
   },
   computed: {
     tags () {
@@ -120,10 +126,16 @@ export default {
       return marked(this.markdownContent, { sanitize: true });
     },
   },
+  created () {
+    this.markdownContent = this.article.content;
+  },
   methods: {
     setValue (field, val) {
       this.article[field] = val;
       this.triggerSave();
+    },
+    strTags (arrayTags = []) {
+      return arrayTags.filter(Boolean).join(';');
     },
     triggerSave: debounce(
       function () {
@@ -132,7 +144,7 @@ export default {
       }, 1500),
 
     publishArticle () {
-      if (this.isArticleSaved && this.article.uid) {
+      if (this.article.uid) {
         this.saveInProgress = true;
         const payload = {
           ...this.payload,
@@ -148,14 +160,8 @@ export default {
 
     async saveArticle (savePayload) {
       this.saveInProgress = true;
-      const uid = this.article.uid;
-      const action = !this.isArticleSaved ? 'post' : 'patch';
-      const url = '/articles'.concat(this.isArticleSaved ? `/${uid}` : '');
-      const { data } = await this.$axios[action](url, savePayload);
-      if (data?.uid) {
-        this.article.uid = data.uid;
-      }
-      this.isArticleSaved = true;
+      const url = `/articles/${this.article.uid}`;
+      await this.$axios.patch(url, savePayload);
       this.saveInProgress = false;
     },
 
@@ -163,7 +169,7 @@ export default {
       // TODO: log errors
       // console.error(e);
       this.saveInProgress = false;
-      this.$toast.error('Hubo un problema al guardar tu artículo');
+      this.$toast.error('Hubo un problema al procesar el artículo');
     },
   },
 };

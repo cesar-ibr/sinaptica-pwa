@@ -12,10 +12,23 @@ export default {
       // claims = null
       // Perform logout operations
       ctx.commit(types.RESET_AUTH_USER);
-    } else {
-      ctx.commit(types.SET_AUTH_USER, authUser);
-      await ctx.dispatch('getUserProfile', { uid: authUser.uid });
+      ctx.dispatch('logOut');
+      return;
     }
+    // Store firebase token
+    const idToken = await this.$fire.auth.currentUser.getIdToken();
+    authUser.firebaseToken = idToken;
+    ctx.commit(types.SET_AUTH_USER, authUser);
+    await ctx.dispatch('getUserProfile', { uid: authUser.uid });
+  },
+
+  onIdTokenChangedAction ({ dispatch }) {
+    dispatch('updateToken');
+  },
+
+  async updateToken (ctx) {
+    const idToken = await this.$fire.auth.currentUser.getIdToken();
+    this.$axios.setToken(idToken, 'Bearer');
   },
 
   async getUserProfile (ctx, { uid }) {
@@ -34,5 +47,10 @@ export default {
     if (this.$fire.auth.currentUser) {
       await this.$fire.auth.signOut();
     }
+  },
+
+  async whoAmI (ctx) {
+    const res = await this.$axios.$get('/whoAmI');
+    return res;
   },
 };

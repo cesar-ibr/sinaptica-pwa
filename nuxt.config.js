@@ -26,6 +26,7 @@ export default {
   plugins: [
     '@/plugins/vuelidate.js',
     '@/plugins/vue-toast.js',
+    '@/plugins/vuex-init.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -67,6 +68,7 @@ export default {
       auth: {
         initialize: {
           onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+          onIdTokenChangedAction: 'auth/onIdTokenChangedAction',
           subscribeManually: false,
         },
         emulatorPort: undefined,

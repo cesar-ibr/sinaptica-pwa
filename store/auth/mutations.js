@@ -9,8 +9,8 @@ export default {
     setKey('signInEmail', email);
   },
   [types.SET_AUTH_USER] (state, authUser) {
-    const { uid, email, emailVerified, displayName } = authUser;
-    state.authUser = { uid, email, emailVerified, displayName };
+    const { uid, email, emailVerified, displayName, firebaseToken } = authUser;
+    state.authUser = { uid, email, emailVerified, displayName, firebaseToken };
   },
   [types.RESET_AUTH_USER] (state) {
     state.authUser = defaultState().authUser;

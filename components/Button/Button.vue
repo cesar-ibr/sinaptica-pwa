@@ -36,9 +36,13 @@ export default {
     cssColors () {
       const color = this.disabled ? 'gray' : this.color;
       const defaultCss =
-        `px-8 py-4 text-white font-semibold bg-${color} `.concat(this.disabled ? '' : 'shadow hover:shadow-md');
+        `px-8 py-4 text-white font-semibold bg-${color}
+        ${this.disabled ? '' : 'shadow hover:shadow-md'}
+        `;
       const lightCss =
-        `p-2 border border-${color} text-${color} hover:bg-${color} hover:text-white`;
+        `p-2 border border-${color} text-${color}
+        ${this.disabled ? '' : `shadow hover:shadow-md hover:text-white hover:bg-${color}`}
+        `;
       return this.light ? lightCss : defaultCss;
     },
   },

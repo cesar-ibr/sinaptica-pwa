@@ -154,33 +154,19 @@ export default {
     },
 
     async googleSignIn () {
-      try {
-        this.signInError = '';
-        const provider = new this.$fireModule.auth.GoogleAuthProvider();
-        const result = await this.$fire.auth.signInWithPopup(provider);
-        const { additionalUserInfo, user } = result;
-        // Set Profile for New Users
-        if (additionalUserInfo && additionalUserInfo.isNewUser) {
-          await this.setUserProfile({
-            uid: user.uid,
-            profile: additionalUserInfo.profile || {},
-          });
-          this.$router.push('/profile');
-          return;
-        }
-        // Redirect to Home
-        await this.getUserProfile(user);
-        this.$router.push('/home');
-      } catch (e) {
-        // TODO: Log errors
-        this.handleError(e);
-      }
+      const provider = new this.$fireModule.auth.GoogleAuthProvider();
+      await this.signInWithPopup(provider);
     },
 
     async githubSignIn () {
+      const provider = new this.$fireModule.auth.GithubAuthProvider();
+      await this.signInWithPopup(provider);
+    },
+
+    async signInWithPopup (provider) {
       try {
         this.signInError = '';
-        const provider = new this.$fireModule.auth.GithubAuthProvider();
+        await this.logOut();
         const result = await this.$fire.auth.signInWithPopup(provider);
         const { additionalUserInfo, user } = result;
         // Set Profile for New Users
@@ -203,7 +189,6 @@ export default {
 
     handleError (e) {
       // TODO: Log error
-      // console.error(e);
       if (error[e.code]) {
         this.signInError = error[e.code].message;
         return;

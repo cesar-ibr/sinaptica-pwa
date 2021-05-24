@@ -71,6 +71,21 @@ export default {
       type: String,
       default: '',
     },
+    /**
+     * When `true` the css classes for margin won't
+     * be added
+     */
+    noMargin: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * Exclude border styles
+     */
+    noBorder: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     inputListeners () {
@@ -91,6 +106,8 @@ export default {
         this.fType === 'textarea' ? 'rounded-xl' : 'rounded-full',
         this.label ? 'mt-4' : '',
         this.errorMessage ? 'with--error' : '',
+        this.noMargin ? '' : 'mb-4',
+        this.noBorder ? '' : 'with--border',
       ];
     },
   },
@@ -98,12 +115,15 @@ export default {
 </script>
 <style lang="postcss" scoped>
 .input {
-  @apply p-4 ring-2;
-  @apply border border-transparent focus:outline-none focus:border-transparent;
-  @apply ring-gray focus:ring-black;
+  @apply p-4 focus:outline-none;
 }
 
 .input.with--error {
   @apply ring-red focus:ring-red;
+}
+
+.input.with--border {
+  @apply border border-transparent focus:border-transparent;
+  @apply ring-2 ring-gray focus:ring-black;
 }
 </style>
